@@ -9,7 +9,6 @@ import {
   LogOut,
   Home,
   BarChart3,
-  Settings,
   Menu,
   X,
   AlertTriangle,
@@ -98,7 +97,7 @@ function Dashboard() {
   };
 
   const exportCsv = async () => {
-    const response = await api.get("/dashboard/export-csv", {
+    const response = await api.get("/dashboard/export/csv", {
       responseType: "blob",
     });
 
@@ -154,7 +153,7 @@ function Dashboard() {
         }`}
       >
         <div className="flex justify-between items-center">
-          <h2 className="font-black text-blue-700">EduSynthesize</h2>
+          <h2 className="font-black text-blue-700">Dashboard</h2>
           <button className="lg:hidden" onClick={() => setSidebarOpen(false)}>
             <X size={22} />
           </button>
@@ -164,35 +163,27 @@ function Dashboard() {
 
         <nav className="mt-8 space-y-2">
           {[
-            { label: "Home", icon: Home },
-            { label: "Courses", icon: BookOpen },
-            { label: "Progress", icon: BarChart3 },
-            { label: "Settings", icon: Settings },
-          ].map((item, index) => {
-            const Icon = item.icon;
+  { label: "Dashboard", icon: Home },
+  { label: "Courses Overview", icon: BookOpen },
+  { label: "Progress Insights", icon: BarChart3 },
+].map((item, index) => {
+  const Icon = item.icon;
 
-            return (
-              <button
-                key={item.label}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold ${
-                  index === 0
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-600 hover:bg-slate-100"
-                }`}
-              >
-                <Icon size={18} />
-                {item.label}
-              </button>
-            );
-          })}
+  return (
+    <button
+      key={item.label}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold ${
+        index === 0
+          ? "bg-blue-600 text-white"
+          : "text-slate-600 hover:bg-slate-100"
+      }`}
+    >
+      <Icon size={18} />
+      {item.label}
+    </button>
+  );
+})}
         </nav>
-
-        <div className="absolute bottom-6 left-5 right-5 bg-blue-50 rounded-2xl p-4">
-          <p className="text-xs text-slate-500">Advance your skills</p>
-          <button className="mt-3 w-full bg-blue-600 text-white rounded-xl py-2 text-sm font-bold">
-            Upgrade to Pro
-          </button>
-        </div>
       </aside>
 
       <div className="lg:ml-64">

@@ -1,16 +1,171 @@
-# React + Vite
+# Frontend Documentation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend app for the Progressive Student Dashboard. It provides the login flow, protected dashboard UI, progress charts, course progress cards, lesson details, mentor overview, and CSV export action.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- Vite
+- React Router
+- Axios
+- Recharts
+- Tailwind CSS
+- Lucide React icons
 
-## React Compiler
+## Folder Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```text
+frontend/
+  public/
+    favicon.svg
+    icons.svg
+  src/
+    api/
+      axios.js          Shared Axios client
+    assets/             Static frontend assets
+    pages/
+      Login.jsx         Login screen
+      Dashboard.jsx     Student and mentor dashboard
+    App.jsx             App routes and protected route wrapper
+    main.jsx            React entry point
+    index.css           Tailwind and global styles
+    App.css             App-level styles
+```
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+If `.env.example` is not present, create `.env` manually:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Vite prints the local URL in the terminal, usually `http://localhost:5173`.
+
+## Scripts
+
+```bash
+npm run dev      # Start Vite dev server
+npm run build    # Build production assets
+npm run preview  # Preview the production build locally
+npm run lint     # Run ESLint
+```
+
+## Environment Variables
+
+Vite exposes only variables prefixed with `VITE_`.
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+The Axios client in `src/api/axios.js` uses `VITE_API_URL` as its base URL and automatically attaches the saved JWT token:
+
+```http
+Authorization: Bearer <token>
+```
+
+## Routing
+
+Routes are defined in `src/App.jsx`.
+
+```text
+/login  Public login page
+/       Protected dashboard page
+```
+
+`ProtectedRoute` checks for a `token` in `localStorage`. Users without a token are redirected to `/login`.
+
+## API Usage
+
+The dashboard calls these backend endpoints:
+
+```text
+GET /dashboard/summary
+GET /dashboard/time-series
+GET /dashboard/course-progress
+GET /dashboard/completion-distribution
+GET /dashboard/recommendations
+GET /dashboard/mentor
+GET /lessons/:courseId
+```
+
+The Axios base URL already includes `/api`, so `api.get("/dashboard/summary")` resolves to:
+
+```text
+http://localhost:5000/api/dashboard/summary
+```
+
+## Local Storage
+
+The app expects these values after login:
+
+```text
+token  JWT returned by the backend
+user   JSON string with id, name, email, and role
+```
+
+Logout clears local storage and redirects the user to `/login`.
+
+## Dashboard Behavior
+
+The dashboard loads summary data, learning trends, course progress, completion distribution, and recommendations when it mounts.
+
+Students see:
+
+- Summary cards
+- Learning trend chart
+- Completion chart
+- Course progress
+- Lesson details
+- Recommendation panel
+
+Mentors also see:
+
+- Student activity table from `/dashboard/mentor`
+
+## Styling
+
+Tailwind is configured through:
+
+```text
+tailwind.config.js
+postcss.config.js
+src/index.css
+```
+
+Use the existing utility-class style when adding UI. The dashboard currently uses light panels, slate text, blue primary actions, and responsive grid layouts.
+
+## Production Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the built app:
+
+```bash
+npm run preview
+```
+
+Deploy the generated `dist/` directory to your frontend host and set `VITE_API_URL` to the deployed backend API URL before building.
