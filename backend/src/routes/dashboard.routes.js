@@ -52,4 +52,10 @@ router.get(
   getMentorDashboard
 );
 
+router.get(
+  "/export/csv",
+  authMiddleware,
+  exportProgressCsv
+);
+
 module.exports = router;

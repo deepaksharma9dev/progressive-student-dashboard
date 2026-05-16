@@ -8,161 +8,199 @@ const {
   ActivityEvent,
 } = require("../models");
 
+const daysAgo = (days) => {
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date;
+};
+
 async function seed() {
   try {
-
-    await sequelize.sync({
-      force: true,
-    });
+    await sequelize.sync({ force: true });
 
     console.log("Database reset completed");
 
-    /**
-     * USERS
-     */
+    const password_hash = await bcrypt.hash("password123", 10);
 
-    const password_hash =
-      await bcrypt.hash(
-        "password123",
-        10
-      );
+    const student1 = await User.create({
+      name: "Deepak Sharma",
+      email: "deepak@example.com",
+      password_hash,
+      role: "student",
+    });
 
-    const student =
-      await User.create({
-        name: "John Student",
-        email:
-          "student@example.com",
-        password_hash,
-        role: "student",
-      });
+    const student2 = await User.create({
+      name: "John Student",
+      email: "student@example.com",
+      password_hash,
+      role: "student",
+    });
 
-    const mentor =
-      await User.create({
-        name: "Sarah Mentor",
-        email:
-          "mentor@example.com",
-        password_hash,
-        role: "mentor",
-      });
+    const student3 = await User.create({
+      name: "Priya Verma",
+      email: "priya@example.com",
+      password_hash,
+      role: "student",
+    });
 
-    /**
-     * COURSES
-     */
+    await User.create({
+      name: "Sarah Mentor",
+      email: "mentor@example.com",
+      password_hash,
+      role: "mentor",
+    });
 
-    const reactCourse =
-      await Course.create({
+    const coursesData = [
+      {
         title: "React Basics",
-        description:
-          "Learn React fundamentals",
-      });
-
-    const nodeCourse =
-      await Course.create({
+        description: "Learn React fundamentals",
+        lessons: 8,
+        duration: 30,
+      },
+      {
         title: "Node.js API Development",
-        description:
-          "Build backend APIs",
+        description: "Build scalable REST APIs",
+        lessons: 7,
+        duration: 40,
+      },
+      {
+        title: "PostgreSQL Fundamentals",
+        description: "Database design and SQL queries",
+        lessons: 6,
+        duration: 35,
+      },
+      {
+        title: "Frontend UI Design",
+        description: "Responsive layout and dashboard UI",
+        lessons: 5,
+        duration: 25,
+      },
+    ];
+
+    const courses = [];
+    const allLessons = [];
+
+    for (const courseData of coursesData) {
+      const course = await Course.create({
+        title: courseData.title,
+        description: courseData.description,
       });
 
-    /**
-     * LESSONS
-     */
+      courses.push(course);
 
-    const lessons = [];
-
-    for (
-      let i = 1;
-      i <= 5;
-      i++
-    ) {
-
-      const lesson =
-        await Lesson.create({
-          course_id:
-            reactCourse.id,
-          title:
-            `React Lesson ${i}`,
-          duration_minutes: 30,
+      for (let i = 1; i <= courseData.lessons; i++) {
+        const lesson = await Lesson.create({
+          course_id: course.id,
+          title: `${courseData.title} - Lesson ${i}`,
+          duration_minutes: courseData.duration + i * 2,
           order_no: i,
         });
 
-      lessons.push(lesson);
+        allLessons.push(lesson);
+      }
     }
 
-    for (
-      let i = 1;
-      i <= 5;
-      i++
-    ) {
+    const createStudentProgress = async (student, config) => {
+      let dayCounter = 21;
 
-      const lesson =
-        await Lesson.create({
-          course_id:
-            nodeCourse.id,
-          title:
-            `Node Lesson ${i}`,
-          duration_minutes: 40,
-          order_no: i,
+      for (const item of config) {
+        const course = courses[item.courseIndex];
+
+        const lessons = await Lesson.findAll({
+          where: {
+            course_id: course.id,
+          },
+          order: [["order_no", "ASC"]],
         });
 
-      lessons.push(lesson);
-    }
+        for (let i = 0; i < item.completed; i++) {
+          const lesson = lessons[i];
 
-    /**
-     * ACTIVITY EVENTS
-     */
+          await ActivityEvent.create({
+            user_id: student.id,
+            course_id: course.id,
+            lesson_id: lesson.id,
+            event_type: "lesson_started",
+            time_spent_minutes: 5,
+            createdAt: daysAgo(dayCounter),
+            updatedAt: daysAgo(dayCounter),
+          });
 
-    for (
-      let i = 0;
-      i < 7;
-      i++
-    ) {
+          await ActivityEvent.create({
+            user_id: student.id,
+            course_id: course.id,
+            lesson_id: lesson.id,
+            event_type: "time_spent",
+            time_spent_minutes: 20 + i * 4,
+            createdAt: daysAgo(dayCounter - 1),
+            updatedAt: daysAgo(dayCounter - 1),
+          });
 
-      const lesson =
-        lessons[i];
+          await ActivityEvent.create({
+            user_id: student.id,
+            course_id: course.id,
+            lesson_id: lesson.id,
+            event_type: "lesson_completed",
+            time_spent_minutes: lesson.duration_minutes,
+            createdAt: daysAgo(dayCounter - 2),
+            updatedAt: daysAgo(dayCounter - 2),
+          });
 
-      await ActivityEvent.create({
-        user_id: student.id,
-        course_id:
-          lesson.course_id,
-        lesson_id: lesson.id,
-        event_type:
-          "lesson_completed",
-        time_spent_minutes:
-          25 + i * 5,
-        createdAt: new Date(
-          Date.now() -
-            i *
-              24 *
-              60 *
-              60 *
-              1000
-        ),
-      });
-    }
+          dayCounter -= 2;
 
-    console.log(
-      "Seed completed successfully"
-    );
+          if (dayCounter < 1) {
+            dayCounter = 1;
+          }
+        }
+      }
+    };
+
+    await createStudentProgress(student1, [
+      { courseIndex: 0, completed: 6 },
+      { courseIndex: 1, completed: 4 },
+      { courseIndex: 2, completed: 3 },
+      { courseIndex: 3, completed: 5 },
+    ]);
+
+    await createStudentProgress(student2, [
+      { courseIndex: 0, completed: 8 },
+      { courseIndex: 1, completed: 5 },
+      { courseIndex: 2, completed: 2 },
+      { courseIndex: 3, completed: 4 },
+    ]);
+
+    await createStudentProgress(student3, [
+      { courseIndex: 0, completed: 3 },
+      { courseIndex: 1, completed: 6 },
+      { courseIndex: 2, completed: 5 },
+      { courseIndex: 3, completed: 2 },
+    ]);
+
+    console.log("Seed completed successfully");
 
     console.log(`
-Student Login:
+Demo Logins:
+
+Student 1:
+deepak@example.com
+password123
+
+Student 2:
 student@example.com
 password123
 
-Mentor Login:
+Student 3:
+priya@example.com
+password123
+
+Mentor:
 mentor@example.com
 password123
 `);
 
     process.exit(0);
-
   } catch (error) {
-
-    console.error(
-      "Seed failed:",
-      error
-    );
-
+    console.error("Seed failed:", error);
     process.exit(1);
   }
 }
