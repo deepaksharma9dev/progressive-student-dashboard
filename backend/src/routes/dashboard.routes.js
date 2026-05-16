@@ -1,13 +1,55 @@
-// Dashboard routes
-// Fetch dashboard data and student progress
+const router =
+  require("express").Router();
 
-const express = require('express');
-const router = express.Router();
-const authMiddleware = require('../middleware/auth');
-const dashboardController = require('../controllers/dashboard.controller');
+const authMiddleware =
+  require("../middleware/auth");
 
-router.get('/stats', authMiddleware, dashboardController.getStats);
-router.get('/progress', authMiddleware, dashboardController.getProgress);
-router.get('/recommendations', authMiddleware, dashboardController.getRecommendations);
+const {
+  getSummary,
+  getTimeSeries,
+  getCourseProgress,
+  getCompletionDistribution,
+  getRecommendations,
+  exportProgressCsv,
+  getMentorDashboard
+} = require(
+  "../controllers/dashboard.controller"
+);
+
+router.get(
+  "/summary",
+  authMiddleware,
+  getSummary
+);
+
+router.get(
+  "/time-series",
+  authMiddleware,
+  getTimeSeries
+);
+
+router.get(
+  "/course-progress",
+  authMiddleware,
+  getCourseProgress
+);
+
+router.get(
+  "/completion-distribution",
+  authMiddleware,
+  getCompletionDistribution
+);
+
+router.get(
+  "/recommendations",
+  authMiddleware,
+  getRecommendations
+);
+
+router.get(
+  "/mentor",
+  authMiddleware,
+  getMentorDashboard
+);
 
 module.exports = router;
