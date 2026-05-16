@@ -55,7 +55,7 @@ progressive-student-dashboard/
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v20.19 or higher)
 - npm or yarn
 
 ### Backend Setup
@@ -142,15 +142,6 @@ The frontend will run on `http://localhost:3000`
 1. Backend changes require server restart
 2. Frontend has hot reload enabled
 3. Check `.env.example` files for required environment variables
-
-## Future Enhancements
-
-- [ ] Real-time notifications
-- [ ] Advanced analytics dashboard
-- [ ] Mobile application
-- [ ] Video streaming support
-- [ ] Peer collaboration features
-- [ ] Integration with third-party tools
 
 ## License
 
