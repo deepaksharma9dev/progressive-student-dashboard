@@ -266,7 +266,7 @@ For migration details, see [backend/MIGRATIONS.md](backend/MIGRATIONS.md).
 
 ## Documentation
 
-- [APPLICATION_DOC.md](APPLICATION_DOC.md): Notion-ready application documentation with screenshot placeholders.
+- [Notion Doc]) (#https://beneficial-macadamia-1a5.notion.site/Progressive-Student-Dashboard-Application-Documentation-f77ccaa3c6364dcd923227ee08f1ac84): Notion-ready application documentation with screenshot placeholders.
 - [backend/README.md](backend/README.md): Backend-specific documentation.
 - [frontend/README.md](frontend/README.md): Frontend-specific documentation.
 - [backend/MIGRATIONS.md](backend/MIGRATIONS.md): Migration and seeding guide.
