@@ -1,6 +1,6 @@
 # Frontend Documentation
 
-Frontend app for the Progressive Student Dashboard. It provides the login flow, protected dashboard UI, progress charts, course progress cards, lesson details, mentor overview, and CSV export action.
+Frontend app for the Progressive Student Dashboard. It provides login, sign up, protected dashboard UI, progress charts, course progress cards, lesson details, mentor overview, and CSV export action.
 
 ## Tech Stack
 
@@ -24,7 +24,7 @@ frontend/
       axios.js          Shared Axios client
     assets/             Static frontend assets
     pages/
-      Login.jsx         Login screen
+      Login.jsx         Login and sign up screen
       Dashboard.jsx     Student and mentor dashboard
     App.jsx             App routes and protected route wrapper
     main.jsx            React entry point
@@ -33,6 +33,8 @@ frontend/
 ```
 
 ## Setup
+
+Use Node.js 20.19 or newer.
 
 Install dependencies:
 
@@ -99,12 +101,15 @@ Routes are defined in `src/App.jsx`.
 The dashboard calls these backend endpoints:
 
 ```text
+POST /auth/register
+POST /auth/login
 GET /dashboard/summary
 GET /dashboard/time-series
 GET /dashboard/course-progress
 GET /dashboard/completion-distribution
 GET /dashboard/recommendations
 GET /dashboard/mentor
+GET /dashboard/export/csv
 GET /lessons/:courseId
 ```
 
@@ -116,7 +121,7 @@ http://localhost:5000/api/dashboard/summary
 
 ## Local Storage
 
-The app expects these values after login:
+The app expects these values after login or sign up:
 
 ```text
 token  JWT returned by the backend

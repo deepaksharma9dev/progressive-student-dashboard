@@ -57,7 +57,7 @@ DB_PORT=5432
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/student_dashboard
 JWT_SECRET=your_jwt_secret_key_here
 JWT_EXPIRE=7d
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:5173
 ```
 
 Start the development server:
@@ -76,7 +76,9 @@ npm run dev            # Start the API with nodemon
 npm run seed           # Run src/seed/seed.js
 npm run migrate        # Run pending Sequelize migrations
 npm run migrate:undo   # Undo the latest migration
+npm run migrate:undo:all # Undo all migrations
 npm run seed:all       # Run Sequelize seeders
+npm run seed:undo      # Undo the latest seeder
 npm run seed:undo:all  # Undo all Sequelize seeders
 ```
 
