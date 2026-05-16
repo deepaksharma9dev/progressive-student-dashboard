@@ -14,7 +14,89 @@ A full-stack learning analytics dashboard for students and mentors. Students can
 - CSV export for student course progress
 - PostgreSQL schema managed with Sequelize models, migrations, and seeders
 
+<<<<<<< HEAD
 ## Tech Stack
+=======
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v20.19 or higher)
+- npm or yarn
+
+### Backend Setup
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+The backend will run on `http://localhost:5000`
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file based on `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+The frontend will run on `http://localhost:3000`
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/logout` - Logout user
+
+### Dashboard
+- `GET /api/dashboard/stats` - Get user statistics
+- `GET /api/dashboard/progress` - Get course progress
+- `GET /api/dashboard/recommendations` - Get learning recommendations
+
+### Lessons
+- `GET /api/lessons` - Get all lessons
+- `GET /api/lessons/:id` - Get specific lesson
+- `POST /api/lessons/:id/complete` - Mark lesson as complete
+
+## Technologies Used
+
+### Backend
+- Node.js / Express.js
+- MongoDB (recommended)
+- JWT for authentication
+- CORS for cross-origin requests
+>>>>>>> bedb63fd0b004adc2a13f412276312aeba617c49
 
 ### Frontend
 
@@ -28,6 +110,7 @@ A full-stack learning analytics dashboard for students and mentors. Students can
 
 ### Backend
 
+<<<<<<< HEAD
 - Node.js
 - Express
 - PostgreSQL
@@ -327,3 +410,12 @@ Logout clears local storage and redirects to `/login`.
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+=======
+## License
+
+MIT License - See LICENSE file for details
+
+## Support
+
+For issues or questions, please create an issue in the repository.
+>>>>>>> bedb63fd0b004adc2a13f412276312aeba617c49
