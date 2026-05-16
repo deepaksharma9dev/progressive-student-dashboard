@@ -78,11 +78,11 @@ function Login() {
           </div>
 
           <h1 className="text-2xl font-black text-blue-700 mt-4">
-            EduSynthesize
+            Progress Dashboard
           </h1>
 
           <p className="text-sm text-slate-500 mt-2">
-            Empowering Scientific Synthesis for Modern Learners
+            Empowering Self-Learning for Modern Learners
           </p>
         </div>
 
